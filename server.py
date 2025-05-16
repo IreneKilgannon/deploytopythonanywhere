@@ -2,25 +2,31 @@ from flask import Flask, url_for, request, redirect, abort, jsonify, render_temp
 from PatternDAO import patternDAO
 from UserDAO import userDAO
 from werkzeug.security import generate_password_hash
+from flask_cors import CORS, cross_origin
+
 
 app = Flask(__name__, static_url_path='', static_folder='static')
-
+app.config['CORS_HEADERS'] = "Content-Type"
 
 @app.route('/')
+@cross_origin()
 def index():
     return render_template('index.html')
 
 @app.route('/users')
+@cross_origin()
 def users():
     return render_template('users.html')
 
 @app.route('/about')
+@cross_origin()
 def about():
     return render_template('about.html')
 
 ###### Pattern Routes
 # Get all patterns
 @app.route('/patterns', methods = ['GET'])
+@cross_origin()
 def getAll():
     try:
         return jsonify(patternDAO.getAll())
@@ -31,6 +37,7 @@ def getAll():
 
 # Find By patternID
 @app.route('/patterns/<patternID>', methods = ['GET'])
+@cross_origin()
 def findByID(patternID):
     try:
         
@@ -48,6 +55,7 @@ def findByID(patternID):
 
 # Find by Brand
 @app.route('/patterns/brand/<brand>', methods = ['GET'])
+@cross_origin()
 def findByBrand(brand):
     try:
         brand = patternDAO.findByBrand(brand)
@@ -62,6 +70,7 @@ def findByBrand(brand):
 
 # Find by Category
 @app.route('/patterns/category/<category>', methods = ['GET'])
+@cross_origin()
 def findByCategory(category):
     try:
         category = patternDAO.findByCategory(category)
@@ -76,6 +85,7 @@ def findByCategory(category):
 
 # Find by Fabric Type
 @app.route('/patterns/fabric_type/<fabric_type>', methods=['GET'])
+@cross_origin()
 def findByFabric(fabric_type):
     try:
         fabric_type = patternDAO.findByFabric(fabric_type)
@@ -89,6 +99,7 @@ def findByFabric(fabric_type):
     
 # Find by patterns by userID
 @app.route('/patterns/userID/<userID>')
+@cross_origin()
 def findByUserID(userID):
     try:
         userID = patternDAO.findByUserID(userID)
@@ -103,6 +114,7 @@ def findByUserID(userID):
 
 # Create a pattern
 @app.route('/patterns', methods=['POST'])
+@cross_origin()
 def create():
     if not request.json:
         abort(400)
@@ -136,6 +148,7 @@ def create():
 
 # Update a pattern
 @app.route('/patterns/<patternID>', methods=['PUT'])
+@cross_origin()
 def update_pattern(patternID):
     try:
         foundPattern = patternDAO.findByID(patternID)
@@ -166,6 +179,7 @@ def update_pattern(patternID):
 
 #  Delete
 @app.route('/patterns/<patternID>', methods=['DELETE'])
+@cross_origin()
 def delete(patternID):
     patternDAO.delete(patternID)
     return jsonify({"done": True})
@@ -173,6 +187,7 @@ def delete(patternID):
 
 ######## User Routes
 @app.route('/users', methods = ['GET'])
+@cross_origin()
 def get_all_users():
     try:
         print("in get all")
@@ -184,6 +199,7 @@ def get_all_users():
 
 # Create a user
 @app.route('/users', methods=['POST'])
+@cross_origin()
 def create_user():
     if not request.json:
         abort(400)
@@ -206,6 +222,7 @@ def create_user():
 
 # Get information for a specific user
 @app.route('/users/<user_id>', methods=['GET'])
+@cross_origin()
 def get_user_by_id(user_id):
     user = userDAO.findByUserID_users(user_id)
     if user:
@@ -214,6 +231,7 @@ def get_user_by_id(user_id):
 
 # Update a user
 @app.route('/users/<userID>', methods=['PUT'])
+@cross_origin()
 def update_user(userID):
     foundUser = userDAO.findByUserID_users(userID)
     print(f"This is foundUser {foundUser}")
@@ -237,6 +255,7 @@ def update_user(userID):
 
 #  Delete
 @app.route('/users/<userID>', methods=['DELETE'])
+@cross_origin()
 def delete_user(userID):
     try:
         userDAO.delete_user(userID)
