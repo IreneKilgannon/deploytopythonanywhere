@@ -1,12 +1,16 @@
 from flask import Flask, url_for, request, redirect, abort, jsonify, render_template
-from PatternDAO import patternDAO
-from UserDAO import userDAO
 from werkzeug.security import generate_password_hash
 from flask_cors import CORS, cross_origin
 
+app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
+from PatternDAO import patternDAO
+from UserDAO import userDAO
 
 app = Flask(__name__, static_url_path='', static_folder='static')
-app.config['CORS_HEADERS'] = "Content-Type"
+
 
 @app.route('/')
 @cross_origin()
