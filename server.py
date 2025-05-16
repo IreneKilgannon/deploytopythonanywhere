@@ -1,5 +1,4 @@
-from flask import Flask, url_for, request, redirect, abort, jsonify, render_template
-from werkzeug.security import generate_password_hash
+from flask import Flask, request, abort, jsonify, render_template
 from flask_cors import CORS, cross_origin
 from PatternDAO import patternDAO
 from UserDAO import userDAO
@@ -13,17 +12,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 def index():
     return render_template('index.html')
 
-@app.route('/users')
-@cross_origin()
-def users():
-    return render_template('users.html')
-
-@app.route('/about')
-@cross_origin()
-def about():
-    return render_template('about.html')
-
-###### Pattern Routes
+##### Pattern Routes
 # Get all patterns
 @app.route('/patterns', methods = ['GET'])
 @cross_origin()
@@ -183,89 +172,6 @@ def update_pattern(patternID):
 def delete(patternID):
     patternDAO.delete(patternID)
     return jsonify({"done": True})
-
-
-######## User Routes
-@app.route('/users', methods = ['GET'])
-@cross_origin()
-def get_all_users():
-    try:
-        print("in get all")
-        users = userDAO.get_all_users()
-        return jsonify(users)
-    except Exception as e:
-        print(f"Error fetching users {e}")
-        return jsonify({"error": "Something went wrong"}), 500
-
-# Create a user
-@app.route('/users', methods=['POST'])
-@cross_origin()
-def create_user():
-    if not request.json:
-        abort(400)
-
-    try:
-        user = {
-            #"userID": request.json["userID"],
-            "first_name": request.json["first_name"],
-            "last_name": request.json["last_name"],
-            "email": request.json["email"],
-            "password": generate_password_hash(request.json["password"]),
-        }
-
-        new_user = userDAO.create_user(user)
-        return jsonify(new_user), 201
-    
-    except Exception as e:
-        print(f"Error creating user: {e}")
-        return jsonify({"error": "Failed to create user"}), 500
-
-# Get information for a specific user
-@app.route('/users/<user_id>', methods=['GET'])
-@cross_origin()
-def get_user_by_id(user_id):
-    user = userDAO.findByUserID_users(user_id)
-    if user:
-        return jsonify(user)
-    return jsonify({"error": "User not found"}), 404
-
-# Update a user
-@app.route('/users/<userID>', methods=['PUT'])
-@cross_origin()
-def update_user(userID):
-    foundUser = userDAO.findByUserID_users(userID)
-    print(f"This is foundUser {foundUser}")
-    if foundUser == {}:
-        return jsonify({}), 404
-    #currentUser = foundUser
-    #print(request.json)
-    #if 'userID' in request.json:
-    #    foundUser['userID'] = request.json['userID']
-    if 'first_name' in request.json:
-        foundUser['first_name'] = request.json['first_name']
-    if 'last_name' in request.json:
-        foundUser['last_name'] = request.json['last_name']
-    if 'email' in request.json:
-        foundUser['email'] = request.json['email']
-    if 'password' in request.json:
-        foundUser['password'] = generate_password_hash(request.json['password'])
-    userDAO.update_user(foundUser)
-    return jsonify(foundUser)
-
-
-#  Delete
-@app.route('/users/<userID>', methods=['DELETE'])
-@cross_origin()
-def delete_user(userID):
-    try:
-        userDAO.delete_user(userID)
-        return jsonify({"done": True})
-    except Exception as e:
-        print(f"Error finding by delete_user: {e}")
-        return jsonify({"error": "Internal Server Error"}), 500
-
-
-######## Borrow Routes
 
 
 if __name__ == "__main__":
