@@ -1,5 +1,5 @@
 import mysql.connector
-import config as cfg
+import db_config as cfg
 
 class UserDAO:
     host =""
