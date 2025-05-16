@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View sewing patterns</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    
+    
+
+    <!--Bootstrap CSS-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!--Awesome font-->
+    <script src="https://kit.fontawesome.com/e8de472ad4.js" crossorigin="anonymous"></script>
+</head>
+
+
+<body>
+    <div class="container p-5 my-5 bg-light border-primary">
+    <h1>Sewing Patterns</h1>
+    <hr>
+
+    
+    <nav class="navbar navbar-expand-lg navbar-light"style="background-color: #88c0e9;">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('index') }}">Sewing Patterns</a>
+              </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('users') }}">Users</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('about') }}">About</a>
+            </li>
+          </ul>
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" id="myInput" type="search" placeholder= "Search by PatternID..." aria-label="Search">
+          </form>
+        </div>
+      </nav>
+      
+    <br>
+
+    <!--<input  class="input-group p-2 mb-2" type="text" id="myInput" onkeyup="filterTable()" placeholder= "Search by PatternID..."><br>-->     
+
+    <div><button class="btn btn-secondary border-dark" id="button-showCreate" onclick="showCreate()">Add a sewing pattern</button></div><br>
+    
+    <table class="table" id="patternTable">
+        <thead >
+            <tr>
+                <th onclick="sortTable(0)" class="table-success">PatternID &nbsp;&#x2b83;</th>
+                <th onclick="sortTable(1)" class="table-success">Brand &nbsp;&#x2b83;</th>
+                <th onclick="sortTable(2)" class="table-success">Category &nbsp;&#x2b83;</th>
+                <th onclick="sortTable(3)" class="table-success">Fabric Type &nbsp;&#x2b83;</th>
+                <th onclick="sortTable(4)" class="table-success">Description &nbsp;&#x2b83;</th>
+                <th onclick="sortTable(5)" class="table-success">Format &nbsp;&#x2b83;</th>
+                <th onclick="sortTable(6)"class="table-success">userID &nbsp;&#x2b83;</th>
+                <th class="table-success">Update</th>
+                <th class="table-success">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    
+
+    <br/>
+    <form id="createUpdateForm" style="display:none" onsubmit="return false;">
+        <!-- Form for creating and updating patterns -->
+        <h2><span id="createLabel">Create a</span> <span id="updateLabel">Update</span> Sewing Pattern</h2>
+        PatternID <br><input type="text" name="patternID" required minlength = "4"><br/>
+        Brand <br><input type="text" name="brand" required><br/>
+        Category <br><select name="category" required>
+            <option value="Coat">Coat</option>
+            <option value="Coordinates">Coordinates</option>
+            <option value="Dress">Dress</option>
+            <option value="Jacket">Jacket</option>
+            <option value="Shirt">Shirt</option>
+            <option value="Skirt">Skirt</option>
+            <option value="Sleepwear">Sleepwear</option>
+            <option value="Trousers">Trousers</option>
+            <option value="Top">Top</option><br>
+            </select><br/>
+        Fabric Type <br><select name="fabric_type" required>
+            <option value="Woven">Woven</option>
+            <option value="Stretch">Stretch</option>
+            <option value="All">All</option><br/>
+            </select><br/>
+        Description <br><input name="description" required><br>
+        Format<br><select name="format">
+            <option value="Paper">Paper</option>
+            <option value="PDF">PDF</option>
+            </select><br>
+        userID<br><input type = "number" name = "userID" required>
+            <br><br>
+        <span><button class="btn btn-secondary border-dark" id="button-doCreate" onclick="doCreate()">Create</button></span>
+        <span><button class="btn btn-secondary border-dark" id="button-doUpdate" onclick="doUpdate()">Update</button></span>
+        </form>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+</body>
+
+<script>
+      // https://www.w3schools.com/bootstrap/bootstrap_filters.asp#
+      $(document).ready(function(){
+      $("#myInput").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#patternTable tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+      });
+    });
+
+    
+    // From W3 schools
+    function sortTable(n) {
+      var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+      table = document.getElementById("patternTable");
+      switching = true;
+      // Set the sorting direction to ascending:
+      dir = "asc";
+      /* Make a loop that will continue until
+      no switching has been done: */
+      while (switching) {
+        // Start by saying: no switching is done:
+        switching = false;
+        rows = table.rows;
+        /* Loop through all table rows (except the
+        first, which contains table headers): */
+        for (i = 1; i < (rows.length - 1); i++) {
+          // Start by saying there should be no switching:
+          shouldSwitch = false;
+          /* Get the two elements you want to compare,
+          one from current row and one from the next: */
+          x = rows[i].getElementsByTagName("td")[n];
+          y = rows[i + 1].getElementsByTagName("td")[n];
+          /* Check if the two rows should switch place,
+          based on the direction, asc or desc: */
+          if (dir == "asc") {
+            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+              // If so, mark as a switch and break the loop:
+              shouldSwitch = true;
+              break;
+            }
+          } else if (dir == "desc") {
+            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+              // If so, mark as a switch and break the loop:
+              shouldSwitch = true;
+              break;
+            }
+          }
+        }
+        if (shouldSwitch) {
+          /* If a switch has been marked, make the switch
+          and mark that a switch has been done: */
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+          // Each time a switch is done, increase this count by 1:
+          switchcount ++;
+        } else {
+          /* If no switching has been done AND the direction is "asc",
+          set the direction to "desc" and run the while loop again. */
+          if (switchcount == 0 && dir == "asc") {
+            dir = "desc";
+            switching = true;
+          }
+        }
+      }
+    }
+
+    function showCreate(){
+        document.getElementById("createUpdateForm").style.display = "block";
+        document.getElementById("button-doCreate").style.display = "block";
+        document.getElementById("button-doUpdate").style.display = "none";
+        document.getElementById("createLabel").style.display = "inline";
+        document.getElementById("updateLabel").style.display = "none";
+        document.getElementById("button-showCreate").style.display = "none";
+        document.getElementById("patternTable").style.display = "none";
+        document.getElementById("myInput").style.display = "none";
+    }
+
+    function showViewAll(){
+        console.log('Showing view all')
+        document.getElementById("createUpdateForm").style.display = "none"
+        document.getElementById("button-showCreate").style.display = "block"
+        document.getElementById("patternTable").style.display = "block"
+    }
+
+    function showUpdate(buttonElement){
+        //console.log('Updating pattern...');
+        document.getElementById("createUpdateForm").style.display = "block";
+        document.getElementById("button-doCreate").style.display = "none";
+        document.getElementById("button-doUpdate").style.display = "block";
+        document.getElementById("createLabel").style.display = "none";
+        document.getElementById("updateLabel").style.display = "inline";
+        document.getElementById("button-showCreate").style.display = "none";
+        document.getElementById("patternTable").style.display = "none";
+        document.getElementById("myInput").style.display = "none";
+
+        var rowElement= buttonElement.parentNode.parentNode;
+        var pattern = getPatternFromRow(rowElement);
+        console.log('Pattern for update:', pattern);
+        //console.log(Pattern)
+        populateFormWithPattern(pattern);
+    }
+
+    function doCreate(){
+        var form = document.getElementById('createUpdateForm');
+
+        if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+        }
+
+        var pattern = {}
+        
+        pattern.patternID = form.querySelector('input[name="patternID"]').value;
+        pattern.brand = form.querySelector('input[name="brand"]').value;
+        pattern.category = form.querySelector('[name="category"]').value;
+        pattern.fabric_type = form.querySelector('[name="fabric_type"]').value;
+        pattern.description = form.querySelector('input[name="description"]').value;
+        pattern.format = form.querySelector('[name="format"]').value;
+        pattern.userID = form.querySelector('input[name="userID"]').value;
+        console.log(JSON.stringify(pattern));
+        //console.log(pattern)
+        createPatternAjax(pattern);
+    }
+    
+    function doUpdate(){
+        var form = document.getElementById('createUpdateForm');
+
+        if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+        }
+
+        var pattern= getPatternFromForm();
+        var rowElement = document.querySelector(`[patternID='${pattern.patternID}']`);
+
+        if (rowElement) {
+            updatePatternAjax(pattern);
+            setPatternInRow(rowElement, pattern);
+            clearForm();
+            showViewAll();
+        } else {
+            console.log('Row element not found')
+        }
+    }
+    
+    function doDelete(r){
+        console.log("in delete")
+        var tableElement = document.getElementById('patternTable');
+        var rowElement = r.parentNode.parentNode;
+        var index = rowElement.rowIndex;
+        
+        //console.log("deleting "+ rowElement.getAttribute("patternID"))
+        deletePatternAjax(rowElement.getAttribute("patternID"));
+        tableElement.deleteRow(index);
+        showViewAll()
+    }
+    
+    function addPatternToTable(pattern){
+        var tableElement = document.getElementById('patternTable')
+        var rowElement = tableElement.insertRow(-1)
+        
+        rowElement.setAttribute('patternID', pattern.patternID)
+        
+        var cell1 = rowElement.insertCell(0);
+        cell1.innerHTML = pattern.patternID
+        var cell2 = rowElement.insertCell(1);
+        cell2.innerHTML = pattern.brand
+        var cell3 = rowElement.insertCell(2);
+        cell3.innerHTML = pattern.category
+        var cell4 = rowElement.insertCell(3);
+        cell4.innerHTML = pattern.fabric_type
+        var cell5 = rowElement.insertCell(4);
+        cell5.innerHTML = pattern.description
+        var cell6 = rowElement.insertCell(5);
+        cell6.innerHTML = pattern.format
+        var cell7 = rowElement.insertCell(6);
+        cell7.innerHTML = pattern.userID
+        var cell8 = rowElement.insertCell(7);
+        cell8.innerHTML = '<button class="btn btn-outline-primary" onclick="showUpdate(this)">Update</button>'
+        var cell9 = rowElement.insertCell(8);
+        cell9.innerHTML = '<button class="btn btn-outline-danger" onclick=doDelete(this)>Delete</button>'
+    }
+
+    function clearForm(){
+        var form = document.getElementById('createUpdateForm')
+
+        form.querySelector('input[name="patternID"]').value =''
+        form.querySelector('input[name="brand"]').value=''
+        form.querySelector('[name="category"]').value =''
+        form.querySelector('[name="fabric_type"]').value= ''
+        form.querySelector('input[name="description"]').value=''
+        form.querySelector('[name="format"]').value=''
+        form.querySelector('input[name="userID"]').value=''
+    }
+
+    function getPatternFromRow(rowElement){
+        var pattern ={}
+
+        pattern.patternID  = rowElement.cells[0].textContent;
+        pattern.brand = rowElement.cells[1].textContent;
+        pattern.category = rowElement.cells[2].textContent;
+        pattern.fabric_type = rowElement.cells[3].textContent;
+        pattern.description = rowElement.cells[4].textContent;
+        pattern.format = rowElement.cells[5].textContent;
+        pattern.userID = rowElement.cells[6].textContent;
+        return pattern
+    }
+
+    function setPatternInRow(rowElement, pattern){
+        rowElement.cells[0].firstChild.textContent = pattern.patternID;
+        rowElement.cells[1].firstChild.textContent = pattern.brand;
+        rowElement.cells[2].firstChild.textContent = pattern.category;
+        rowElement.cells[3].firstChild.textContent = pattern.fabric_type;
+        rowElement.cells[4].firstChild.textContent = pattern.description;
+        rowElement.cells[5].firstChild.textContent = pattern.format;
+        rowElement.cells[6].firstChild.textContent = pattern.userID;
+    }
+    
+    function populateFormWithPattern(pattern){
+        console.log("Populating form with pattern:", pattern);
+
+        var form = document.getElementById('createUpdateForm');
+        form.querySelector('input[name="patternID"]').disabled = true;
+
+        form.querySelector('input[name="patternID"]').value  = pattern.patternID;
+        form.querySelector('input[name="brand"]').value= pattern.brand;
+        
+        var categorySelect = form.querySelector('[name="category"]');
+        categorySelect.value = pattern.category;
+
+        var fabricSelect = form.querySelector('[name="fabric_type"]');
+        fabricSelect.value = pattern.fabric_type;
+
+        form.querySelector('input[name = "description"]').value = pattern.description;
+
+        var formatSelect = form.querySelector('[name="format"]');
+        formatSelect.value= pattern.format;
+
+        form.querySelector('input[name="userID"]')
+        return pattern;
+    }
+
+
+    function getPatternFromForm(){
+        var form = document.getElementById('createUpdateForm')
+        var pattern = {}
+        
+        pattern.patternID = form.querySelector('input[name="patternID"]').value
+        pattern.brand = form.querySelector('input[name="brand"]').value
+        pattern.category = form.querySelector('[name="category"]').value
+        pattern.fabric_type = form.querySelector('[name="fabric_type"]').value
+        pattern.description = form.querySelector('[name="description"]').value
+        pattern.format = form.querySelector('[name="format"]').value
+        pattern.userID = form.querySelector('input[name="userID"]').value
+        console.log(JSON.stringify(pattern))
+        return pattern
+    }
+
+    function getAllAjax(){
+    $.ajax({
+        "url": "/patterns",
+        "method":"GET",
+        "data":"",
+        "dataType": "JSON",
+        "success":function(result){
+            console.log(result);
+            for (pattern of result){
+                addPatternToTable(pattern);
+            }
+            
+        },
+        "error":function(xhr,status,error){
+            console.log("error: "+status+" msg:"+error);
+        }
+    });
+    }
+    function createPatternAjax(pattern){
+        console.log("Test" , JSON.stringify(pattern)); 
+        $.ajax({
+            "url": "/patterns",
+            "method":"POST",
+            "data":JSON.stringify(pattern),
+            "dataType": "JSON",
+            "contentType": "application/json; charset=utf-8",
+            "success":function(result){
+                if (result.patternID) {
+                addPatternToTable(result);
+                } else {
+                addPatternToTable(pattern);
+                }
+                clearForm();
+                showViewAll();
+        },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+        });
+    }
+
+    function updatePatternAjax(pattern){
+        console.log(JSON.stringify(pattern));
+        $.ajax({
+            "url": "/patterns/"+encodeURI(pattern.patternID),
+            "method":"PUT",
+            "data":JSON.stringify(pattern),
+            "dataType": "JSON",
+            "contentType": "application/json; charset=utf-8",
+            "success":function(result){
+                console.log(result);
+               
+            },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+        });
+    }
+
+    function deletePatternAjax(patternID){
+        $.ajax({
+            "url": "/patterns/"+encodeURI(patternID),
+            "method":"DELETE",
+            "data":"",
+            "dataType": "JSON",
+            "contentType": "application/json; charset=utf-8",
+            "success":function(result){
+                //console.log(result);
+                  
+            },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+        });
+    }
+
+
+    getAllAjax();
+
+    </script>
+</html>
