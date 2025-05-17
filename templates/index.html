@@ -134,7 +134,6 @@
         <hr>
         <b>PatternID:</b><br><input type="text" name="patternID" class="form-control" required minlength = "4"><br/>
         <b>Brand:</b><br><input type="text" name="brand" class="form-control"required><br/>
-        
         <b>Category:</b><br><select name="category" class="form-control" required>
             <option value="Coat">Coat</option>
             <option value="Coordinates">Coordinates</option>
@@ -146,22 +145,19 @@
             <option value="Trousers">Trousers</option>
             <option value="Top">Top</option><br>
             </select><br/>
-            <br>
         <b>Fabric Type:</b><br><select name="fabric_type" class="form-control" required>
             <option value="Woven">Woven</option>
             <option value="Stretch">Stretch</option>
             <option value="All">All</option><br/>
             </select><br/>
-            <br>
         <b>Description:</b><br>
         <textarea name="description" rows="4" class="form-control" required></textarea><br>
         <b>Format:</b><br><select name="format" class="form-control" required>
             <option value="Paper">Paper</option>
             <option value="PDF">PDF</option>
             </select><br>
-            <br>   
         <b>userID:</b><br><input type = "number" name = "userID" class="form-control"required>
-            <br><br>
+            <br>
         <span><button class="btn btn-secondary border-dark" id="button-doCreate" onclick="doCreate()">Create</button></span>
         <span><button class="btn custom-btn border-dark" id="button-doUpdate" onclick="doUpdate()">Update</button></span>
         </form>
