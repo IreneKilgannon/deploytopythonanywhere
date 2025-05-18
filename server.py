@@ -120,14 +120,23 @@ def create():
     if not request.json:
         abort(400)
     
-    # Chat GPT - handling missing fields
+    # Used Chat GPT - how to handle missing fields
     # Do not add to db if required field missing. 
     required_fields = ["patternID", "brand", "category", "fabric_type", "description", "format", "userID"]
 
     for field in required_fields:
         if field not in request.json:
             return jsonify({"error": f"Missing required field: {field}"}), 400
-                           
+
+    pattern_id = request.json["patternID"]
+    user_id = request.json["userID"]
+
+    if patternDAO.findByID(pattern_id):
+        return jsonify({"error": "pattern_id_exists"}), 400
+    
+    if not patternDAO.findByUserID(user_id):
+        return jsonify({"error": "user_id_not_found"}), 400
+    
     try:
         pattern = {
             "patternID": request.json["patternID"],
