@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash
 
 app = Flask(__name__, static_url_path='', static_folder='static')
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -85,7 +86,20 @@ def findByFabric(fabric_type):
     except Exception as e:  
         print(f"Error finding pattern by fabric_type: {e}")
         return jsonify({"error": "Internal Server Error"}), 500
-    
+
+# Find patterns by format
+@app.route('/patterns/format/<format>')
+def findByFormat(format):
+    try:
+        format = patternDAO.findByFormat(format)
+
+        if not format:
+            return jsonify({"error": f"Pattern format, {format} does not exist."}), 404
+        return jsonify(format)
+    except Exception as e:  
+        print(f"Error finding pattern by format: {e}")
+        return jsonify({"error": "Internal Server Error"}), 500
+
 # Find by patterns by userID
 @app.route('/patterns/userID/<userID>')
 def findByUserID(userID):
@@ -244,6 +258,8 @@ def delete_user(userID):
         print(f"Error finding by delete_user: {e}")
         return jsonify({"error": "Internal Server Error"}), 500
 
+
+######## Borrow Routes
 
 
 if __name__ == "__main__":

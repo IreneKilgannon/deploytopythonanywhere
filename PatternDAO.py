@@ -1,5 +1,5 @@
 import mysql.connector
-import db_config as cfg
+import config as cfg
 
 class PatternDAO:
     host =""
@@ -164,6 +164,29 @@ class PatternDAO:
             #return returnvalue
         except Exception as e:
             print(f"Database error in findByFabric: {e}")
+            raise
+        finally:
+            self.closeAll()
+
+    # View by Format
+    def findByFormat(self, format):
+        try:
+            cursor = self.getCursor()
+            sql = "SELECT * FROM patterns WHERE format = %s"
+            values = (format, )
+            cursor.execute(sql, values)
+            results = cursor.fetchall()
+
+            if not results:
+                return None
+
+            patterns = []
+            for row in results:
+                patterns.append(self.convertToDictionaryPatterns(row))
+            return patterns
+        
+        except Exception as e:
+            print(f"Database error in findByFormat: {e}")
             raise
         finally:
             self.closeAll()

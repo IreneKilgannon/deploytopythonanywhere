@@ -40,7 +40,7 @@
     </button>
 
     <!-- Nav links and search form -->
-    <div class="collapse navbar-collapse d-flex align-items-center justify-content-between custom-navbar" id="navbarNav">
+    <div class="collapse navbar-collapse" id="navbarNav">
       
       <!-- Nav links -->
       <ul class="navbar-nav d-flex flex-row me-auto">
@@ -104,6 +104,24 @@
             <button id="resetFilters" class="btn custom-btn">Reset Filters</button>
         </div>
     </div>
+    
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <input type="text" id="descriptionInput" class="form-control" onkeyup="myFunction()" placeholder="Search by Description...">
+        </div>
+        <div class="col-md-3">
+            <select id="formatFilter" class="form-control">
+                <option value="">Filter by Format</option>
+                <option value="PDF">PDF</option>
+                <option value="Paper">Paper</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <input type="number" id="userIDFilter" class="form-control" placeholder="Filter by User ID">
+        </div>
+    </div>
+
+
     <div id="alertContainer" class="my-3"></div>
 
     
@@ -134,6 +152,7 @@
         <hr>
         <b>PatternID:</b><br><input type="text" name="patternID" class="form-control" required minlength = "4"><br/>
         <b>Brand:</b><br><input type="text" name="brand" class="form-control"required><br/>
+        
         <b>Category:</b><br><select name="category" class="form-control" required>
             <option value="Coat">Coat</option>
             <option value="Coordinates">Coordinates</option>
@@ -145,19 +164,22 @@
             <option value="Trousers">Trousers</option>
             <option value="Top">Top</option><br>
             </select><br/>
+            <br>
         <b>Fabric Type:</b><br><select name="fabric_type" class="form-control" required>
             <option value="Woven">Woven</option>
             <option value="Stretch">Stretch</option>
             <option value="All">All</option><br/>
             </select><br/>
+            <br>
         <b>Description:</b><br>
         <textarea name="description" rows="4" class="form-control" required></textarea><br>
         <b>Format:</b><br><select name="format" class="form-control" required>
             <option value="Paper">Paper</option>
             <option value="PDF">PDF</option>
             </select><br>
+            <br>   
         <b>userID:</b><br><input type = "number" name = "userID" class="form-control"required>
-            <br>
+            <br><br>
         <span><button class="btn btn-secondary border-dark" id="button-doCreate" onclick="doCreate()">Create</button></span>
         <span><button class="btn custom-btn border-dark" id="button-doUpdate" onclick="doUpdate()">Update</button></span>
         </form>
@@ -167,7 +189,7 @@
             <section class="mb-4">
                 <p>Yes, you have way too many patterns but there's always room for one more! 
                 <br>
-                <a href="https://burdastyle.com" target="_blank" style="color: white;">burdastyle.com    </a>
+                <a href="https://burdasyle.com" target="_blank" style="color: white;">burdastyle.com    </a>
                 <a href="https://www.pattydoo.de/" target="_blank" style="color: white;">pattydoo.de</a>
                 <a href="https://sewdirect.com" target="_blank" style="color: white;">sewdirect.com</a>             
                 <a href="https://www.stylearc.com/" target="_blank" style="color: white;">stylearc.com</a>
@@ -235,17 +257,59 @@
           }
       });
       
+      $("#formatFilter").change(function() {
+        var format = $(this).val();
+        if(format) {
+            getPatternsByFormat(format);
+        } else {
+            getAllAjax(); // Reset to show all patterns
+        }
+    });
+
+        $("#userIDFilter").change(function() {
+            var userID = $(this).val();
+            if(userID) {
+                getPatternsByUserID(userID);
+            } else {
+                getAllAjax(); // Reset to show all patterns
+            }
+        });
+
       $("#resetFilters").click(function() {
           $("#categoryFilter").val('');
           $("#brandFilter").val('');
           $("#fabricFilter").val('');
+          $("#formatFilter").val('');
+          $("#userIDFilter").val('');          
           getAllAjax();
       });
       
       // Populate brand filter on page load
       populateBrandFilter();
 
+    //FROM W3 SCHOOLS https://www.w3schools.com/howto/howto_js_filter_table.asp
+    //filter by description
+    function myFunction() {
+  // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("descriptionInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("patternTable");
+        tr = table.getElementsByTagName("tr");
 
+  // Loop through all table rows, and hide those who don't match the search query
+       for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[4];
+            if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            } 
+            }
+        }
+        }
 
     // From W3 schools
     function sortTable(n) {
@@ -554,35 +618,35 @@
 
        
     function getPatternsByCategory(category) {
-        $.ajax({
-            "url": "/patterns/category/" + encodeURIComponent(category),
-            "method": "GET",
-            "dataType": "JSON",
-            "success": function(result) {
-                console.log("Category results:", result);
-                // Clear the table
-                $('#patternTable tbody').empty();
-                
-                // If we get a valid result (either array or single object)
-                if (result) {
-                    // Handle both array and single object responses
-                    if (Array.isArray(result)) {
-                        for (let pattern of result) {
-                            addPatternToTable(pattern);
-                        }
-                    } else {
-                        // Single object
-                        addPatternToTable(result);
+    $.ajax({
+        "url": "/patterns/category/" + encodeURIComponent(category),
+        "method": "GET",
+        "dataType": "JSON",
+        "success": function(result) {
+            console.log("Category results:", result);
+            // Clear the table
+            $('#patternTable tbody').empty();
+            
+            // If we get a valid result (either array or single object)
+            if (result) {
+                // Handle both array and single object responses
+                if (Array.isArray(result)) {
+                    for (let pattern of result) {
+                        addPatternToTable(pattern);
                     }
                 } else {
-                    console.log("No patterns found for category: " + category);
+                    // Single object
+                    addPatternToTable(result);
                 }
-            },
-            "error": function(xhr, status, error) {
-                console.log("Error fetching by category: " + status + " msg:" + error);
-                alert("Error fetching patterns for category: " + category);
+            } else {
+                console.log("No patterns found for category: " + category);
             }
-        });
+        },
+        "error": function(xhr, status, error) {
+            console.log("Error fetching by category: " + status + " msg:" + error);
+            alert("Error fetching patterns for category: " + category);
+        }
+    });
     }
     
     function getPatternsByBrand(brand) {
@@ -649,6 +713,70 @@
         });
     }
     
+
+    function getPatternsByFormat(format) {
+        $.ajax({
+            "url": "/patterns/format/" + encodeURIComponent(format),
+            "method": "GET",
+            "dataType": "JSON",
+            "success": function(result) {
+                console.log("Format results:", result);
+                // Clear the table
+                $('#patternTable tbody').empty();
+                
+                // If we get a valid result (either array or single object)
+                if (result) {
+                    // Handle both array and single object responses
+                    if (Array.isArray(result)) {
+                        for (let pattern of result) {
+                            addPatternToTable(pattern);
+                        }
+                    } else {
+                        // Single object
+                        addPatternToTable(result);
+                    }
+                } else {
+                    console.log("No patterns found for format: " + format);
+                }
+            },
+            "error": function(xhr, status, error) {
+                console.log("Error fetching by format: " + status + " msg:" + error);
+                alert("Error fetching patterns for format: " + format);
+            }
+        });
+    }
+
+    function getPatternsByUserID(userID) {
+        $.ajax({
+            "url": "/patterns/userID/" + encodeURIComponent(userID),
+            "method": "GET",
+            "dataType": "JSON",
+            "success": function(result) {
+                console.log("User ID results:", result);
+                // Clear the table
+                $('#patternTable tbody').empty();
+                
+                // If we get a valid result (either array or single object)
+                if (result) {
+                    // Handle both array and single object responses
+                    if (Array.isArray(result)) {
+                        for (let pattern of result) {
+                            addPatternToTable(pattern);
+                        }
+                    } else {
+                        // Single object
+                        addPatternToTable(result);
+                    }
+                } else {
+                    console.log("No patterns found for user ID: " + userID);
+                }
+            },
+            "error": function(xhr, status, error) {
+                console.log("Error fetching by user ID: " + status + " msg:" + error);
+                alert("Error fetching patterns for user ID: " + userID);
+            }
+        });
+    }
     // Function to populate brand filter dynamically from existing patterns
     function populateBrandFilter() {
         $.ajax({
