@@ -830,6 +830,7 @@
             "error":function(xhr,status,error){
                 if (xhr.status === 400) {
                     showAlert("Pattern ID already exists. Please use a different ID.", 'danger');
+                    alert("Pattern ID already exists. Please use a different ID.");
                 } else {
                     showAlert("Check UserID exists. Error creating pattern: " + status + " msg:" + error, 'danger');
                 }
