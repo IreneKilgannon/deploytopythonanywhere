@@ -134,7 +134,7 @@ def create():
     if patternDAO.findByID(pattern_id):
         return jsonify({"error": "pattern_id_exists"}), 400
     
-    if not patternDAO.findByUserID(user_id):
+    if not userDAO.findByUserID_users(user_id):
         return jsonify({"error": "user_id_not_found"}), 400
     
     try:

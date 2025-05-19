@@ -325,7 +325,6 @@
     }
 
 
-
     function getAllUserAjax(){
         $.ajax({
             "url": "/users",
@@ -421,15 +420,17 @@
             if (user && user.userID) {
                 addUserToTable(user); 
             } else {
-                showAlert("User not found");
+                showAlert("UserID not found");
             }
         },
         error: function(xhr, status, error) {
             console.log("Error fetching pattern:", error);
-            showAlert(`User ${userID} not found.`, 'primary');
+            showAlert(`UserID ${userID} not found.`, 'primary');
         }
     });
-    }    // Don't display the table at first
+    }    
+    
+    // Don't display the table at first
     //getAllUserAjax();
 
     </script>
