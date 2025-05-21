@@ -1,7 +1,9 @@
 import mysql.connector
 import db_config as cfg
 
+
 class PatternDAO:
+    """A data access object class to interact with the patterns table in the MySQL database, sewing_patterns."""
     host =""
     user = ""
     password =""
@@ -11,13 +13,14 @@ class PatternDAO:
 
 
     def __init__(self):
+        """Initializes the database credentials from config file. """
         self.host= cfg.mysql['host']
         self.user= cfg.mysql['user']
         self.password= cfg.mysql['password']
         self.database= cfg.mysql['database']
 
-    # Setting up connectors to database
     def getCursor(self):
+        """Sets up connection to the database and returns a cursor."""
         self.connection = mysql.connector.connect(
             host=self.host,
             user=self.user,
@@ -28,10 +31,12 @@ class PatternDAO:
         return self.cursor
 
     def closeAll(self):
+        """Close the database connection and cursor."""
         self.connection.close()
         self.cursor.close()
 #
     def convertToDictionaryPatterns(self, resultLine):
+        """Converts the result from a query to the patterns table into a dictionary."""
         attkeys=['patternID', 'brand','category', 'fabric_type', 'description', 'format', 'userID']
         pattern = {}
         currentkey = 0
@@ -41,6 +46,7 @@ class PatternDAO:
         return pattern
 
     def convertToDictionaryUsers(self, resultLine):
+        """Converts the result from a query to the users table into a dictionary."""
         attkeys=['userID', 'first_name','last_name', 'email', 'password']
         user = {}
         currentkey = 0
@@ -49,8 +55,8 @@ class PatternDAO:
             currentkey = currentkey + 1 
         return user
 
-# View all patterns
     def getAll(self):
+        """Gets all the patterns from the database."""
         try:
             cursor = self.getCursor()
             sql = "SELECT * from patterns"
@@ -68,11 +74,12 @@ class PatternDAO:
         except Exception as e:
             print(f"Database error in getAll: {e}")
             raise
+
         finally:
             self.closeAll()
 
-# View by ID
     def findByID(self, patternID):
+        """Get a pattern by patternID. """
         try:
             cursor = self.getCursor()
             sql = "SELECT * FROM patterns WHERE patternID = %s"
@@ -94,6 +101,7 @@ class PatternDAO:
 
 # View by Category
     def findByCategory(self, category):
+        """Get patterns filtered by category. """
         try:
             cursor = self.getCursor()
             sql = "SELECT * FROM patterns WHERE category = %s"
@@ -118,8 +126,8 @@ class PatternDAO:
         finally:
             self.closeAll()
 
-# View by Brand
     def findByBrand(self, brand):
+        """Get patterns filtered by brand."""
         try:
             cursor = self.getCursor()
             sql = "SELECT * FROM patterns WHERE brand = %s"
@@ -134,18 +142,15 @@ class PatternDAO:
             for row in results:
                 patterns.append(self.convertToDictionaryPatterns(row))
             return patterns
-            #returnvalue = self.convertToDictionaryPatterns(result)
-            #return returnvalue
         
         except Exception as e:
             print(f"Database error in findByBrand: {e}")
             raise
-        
         finally:
             self.closeAll()
 
-# View by Fabric Type
     def findByFabric(self, fabric_type):
+        """Get patterns filtered by fabric type"""
         try:
             cursor = self.getCursor()
             sql = "SELECT * FROM patterns WHERE fabric_type = %s"
@@ -160,16 +165,15 @@ class PatternDAO:
             for row in results:
                 patterns.append(self.convertToDictionaryPatterns(row))
             return patterns
-            #returnvalue = self.convertToDictionaryPatterns(result)
-            #return returnvalue
+        
         except Exception as e:
             print(f"Database error in findByFabric: {e}")
             raise
         finally:
             self.closeAll()
 
-    # View by Format
     def findByFormat(self, format):
+        """Get patterns filtered by pattern format."""
         try:
             cursor = self.getCursor()
             sql = "SELECT * FROM patterns WHERE format = %s"
@@ -191,8 +195,8 @@ class PatternDAO:
         finally:
             self.closeAll()
 
-    # View by UserID
     def findByUserID(self, userID):
+        """Get the patterns owned by a specific userID."""
         try:
             cursor = self.getCursor()
             sql = "SELECT * FROM patterns WHERE userID = %s"
@@ -207,9 +211,6 @@ class PatternDAO:
             for row in results:
                 patterns.append(self.convertToDictionaryPatterns(row))
             return patterns
-
-            #returnvalue = self.convertToDictionaryPatterns(result)
-            #return returnvalue
         
         except Exception as e:
             print(f"Database error in findByUserID: {e}")
@@ -217,8 +218,8 @@ class PatternDAO:
         finally:
             self.closeAll()
     
-# Create a pattern
     def create(self, pattern):
+        """Insert a new sewing pattern into the patterns table."""
         try:
             cursor = self.getCursor()
             sql = "INSERT INTO patterns (patternID, brand, category, fabric_type, description, format, userID) VALUES (%s, %s, %s, %s, %s, %s, %s)"
@@ -227,14 +228,15 @@ class PatternDAO:
             self.connection.commit()
             newid = cursor.lastrowid
             return newid
+        
         except Exception as e:
             print(f"Database error in create: {e}")
             raise
         finally:
             self.closeAll()
     
-# Update a pattern
     def update(self, pattern):
+        """Update a sewing pattern."""
         try:
             cursor = self.getCursor()
             sql = "UPDATE patterns SET brand = %s, category = %s, fabric_type = %s, description = %s, format = %s, userID= %s WHERE patternID = %s"
@@ -248,8 +250,8 @@ class PatternDAO:
         finally:
             self.closeAll()
 
-# Delete
     def delete(self, patternID):
+        """Delete a sewing pattern by patternID."""
         try:
             cursor = self.getCursor()
             sql = "DELETE FROM patterns WHERE patternID = %s"
@@ -257,28 +259,11 @@ class PatternDAO:
             cursor.execute(sql, values)
             self.connection.commit()
             print("Pattern deleted")
+
         except Exception as e:
             print(f"Database error in delete: {e}")
             raise
         finally:
             self.closeAll()
-
-
-# Borrow a pattern
-    def create_borrow_request(self, borrow):
-        try:
-            cursor = self.getCursor()
-            sql = "INSERT INTO borrow_request (loadID, userID, patternID) VALUES (%s, %s, %s) "
-            values = [borrow['loadID'], borrow['userID'], borrow['patternID']]
-            cursor.execute(sql, values)
-            self.connection.commit()
-            newid = cursor.lastrowid
-            return newid
-        except Exception as e:
-            print(f"Database error in create_borrow_request: {e}")
-            raise
-        finally:
-            self.closeAll()
-
 
 patternDAO = PatternDAO()

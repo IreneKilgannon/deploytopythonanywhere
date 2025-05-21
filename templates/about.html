@@ -1,4 +1,7 @@
-<!-- templates/home.html -->
+<!--
+    This is the about page for the sewing patterns database. 
+    It provides information about the database and its purpose.
+    The page includes a navigation bar, a banner image, and a footer with links to sewing pattern websites.-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,40 +23,76 @@
 
 
 <body>
-  <div class="container p-3 my-3 bg-light border-primary">
-    <nav class="navbar navbar-expand-lg" style="background-color: #696e8a;">
-<div class="container-fluid d-flex align-items-center justify-content-between">
-    <!-- Brand -->
-    <a class="navbar-brand text-white" href="#"><i class="fa-solid fa-scissors"></i></a>
-    <!-- Toggle for mobile -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <!-- Nav links and search form -->
-    <div class="collapse navbar-collapse" id="navbarNav">
-    
-      <!-- Nav links -->
-      <ul class="navbar-nav d-flex flex-row me-auto">
-        <li class="nav-item mx-2 ">
-          <a class="nav-link text-white" href="{{ url_for('index') }}">Sewing Patterns</a>
-        </li>
-        <li class="nav-item mx-2">
-          <a class="nav-link text-white" href="{{ url_for('users') }}">Users</a>
-        </li>
-        <li class="nav-item mx-2">
-          <a class="nav-link active" href="{{ url_for('about') }}">About</a>
-        </li>
-      </ul>
-        </div>
-        </div>
-    </nav><br>
-    <img src="{{ url_for('static', filename='banner.png') }}" alt = "Sew Organised" class="img-fluid" style="width: 100%; height: auto;">
-    <hr>
- 
+  <div class="container p-3 my-3 bg-light border-primary shadow-lg rounded">
+      <!-- Navigation Bar -->
+      <nav class="navbar navbar-expand-lg custom-navbar rounded" style="background-color: #696e8a;">
+          <div class="container-fluid d-flex align-items-center justify-content-between">
 
+          <!-- Brand -->
+          <a class="navbar-brand text-white" href="#"><i class="fa-solid fa-scissors"></i></a>
+          <!-- Toggle for mobile -->
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+           aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+             <span class="navbar-toggler-icon"></span>
+          </button>
 
-  <p>Add paragraph explaining the database</p>
+         <!-- Nav links-->
+         <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav d-flex flex-row me-auto">
+               <li class="nav-item mx-2 ">
+                 <a class="nav-link text-white" href="{{ url_for('index') }}">Sewing Patterns</a>
+               </li>
+               <li class="nav-item mx-2">
+                 <a class="nav-link text-white" href="{{ url_for('users') }}">Users</a>
+               </li>
+               <li class="nav-item mx-2">
+                 <a class="nav-link active" href="{{ url_for('about') }}">About</a>
+               </li>
+            </ul>
+             </div>
+            </div>
+      </nav> 
+    <br>
+
+    <!-- Banner Image -->
+    <img src="{{ url_for('static', filename='banner.png') }}" alt = "Sew Organised" class="img-fluid rounded shadow-lg" style="width: 100%; height: auto;">
+  <br>
+    <!-- Main Content -->
+
+  <div class="container-about bg-light p-5 rounded shadow-lg my-5">
+    <div class="row align-items-center">
+        <div class="col-md-5 text-center mb-4 mb-md-0">
+            <img src="{{ url_for('static', filename='funny.jpg') }}" alt="funny" class="img-fluid rounded border shadow-sm">
+        </div>
+        <div class="col-md-7 text-start">
+            <h2 class="mb-3 fw-bold">Drowning in a Sea of Sewing Patterns?</h2>
+            <p class="lead">Ever bought the same pattern twice? <span class="fs-4">😳</span></p>
+            <p><strong>Sew Organised</strong> helps you track your patterns and lets your friends share theirs too!</p>
+
+            <h3 class="mt-4 mb-3 fw-semibold">✨ How it works:</h3>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">1. Register on the <strong>Users</strong> page to get your user ID.</li>
+                <li class="list-group-item">2. Start adding your patterns!</li>
+                <li class="list-group-item">3. Search by patternID before you buy!</li>
+                <li class="list-group-item">4. Browse by category when you can't decide what to make.</li>
+                <li class="list-group-item">5. Want to borrow a friend's pattern? Use their userID to get their email address and contact them!</li>
+            </ul>
+        </div>
+    </div>
+  </div>
+  <!--Footer-->
+  <footer class="text-center text-white mt-5 rounded" style="background-color: #696e8a;">
+    <div class="container p-4">
+    <section class="mb-4">
+        <p>Yes, you have way too many patterns but there's always room for one more! 
+        <br>
+        <a href="https://burdastyle.com" target="_blank" style="color: white;">burdastyle.com    </a>
+        <a href="https://www.pattydoo.de/" target="_blank" style="color: white;">pattydoo.de</a>
+        <a href="https://sewdirect.com" target="_blank" style="color: white;">sewdirect.com</a>        
+        <a href="https://www.stylearc.com/" target="_blank" style="color: white;">stylearc.com</a>
+        <a href="https://thefoldline.com/" target="_blank" style="color: white;">thefoldline.com</a>
+        </p>
+    <p class="mb-0">
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
 </body>

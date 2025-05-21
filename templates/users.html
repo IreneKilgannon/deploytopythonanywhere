@@ -1,3 +1,7 @@
+<!--
+    This is the users page for the sewing patterns database. 
+    New users can register to get a userID.
+    Upon entering userID, it displays users information and buttons to create, update and delete users.-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,6 +19,7 @@
     <!--Bootstrap CSS-->
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <!--CSS-->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
     <!--Awesome font-->
@@ -24,99 +29,110 @@
 </head>
 <body>
     
-    <div class="container p-3 my-3 bg-light border-primary">
+    <div class="container p-3 my-3 bg-light rounded shadow-lg border-primary">
 
-        <nav class="navbar navbar-expand-lg" style="background-color: #696e8a;">
-        <div class="container-fluid d-flex align-items-center justify-content-between">
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-expand-lg custom-navbar shadow-lg rounded" style="background-color: #696e8a;">
+            <div class="container-fluid d-flex align-items-center justify-content-between">
     
             <!-- Brand -->
             <a class="navbar-brand text-white" href="#"><i class="fa-solid fa-scissors"></i></a>
+
             <!-- Toggle for mobile -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
               aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
-            <!-- Nav links and search form -->
-            <div class="collapse navbar-collapse" id="navbarNav">
-            
-              <!-- Nav links -->
-              <ul class="navbar-nav d-flex flex-row me-auto">
-                <li class="nav-item mx-2 ">
-                  <a class="nav-link text-white" href="{{ url_for('index') }}">Sewing Patterns</a>
-                </li>
-                <li class="nav-item mx-2">
-                  <a class="nav-link active" href="{{ url_for('users') }}">Users</a>
-                </li>
-                <li class="nav-item mx-2">
-                  <a class="nav-link text-white" href="{{ url_for('about') }}">About</a>
-                </li>
-              </ul>
-              <button class="btn custom-btn border-dark" id="button-showCreateUser" onclick="showCreateUser()">Get your userID!</button>
 
-              <form class="d-flex align-items-center mx-2 my-1" onsubmit="event.preventDefault(); searchByUserID();">
-              <input class="form-control form-control-ml" id="userIdInput" type="search" placeholder="Enter User ID..." aria-label="Search" style="margin-top: 21px;">
-            </form>          
-            
-                </div>
-                </div>
-            </nav>
-        <br>
-        <img src="{{ url_for('static', filename='banner.png') }}" alt = "Sew Organised" class="img-fluid" style="width: 100%; height: auto;">
+                <!-- Nav links and search form -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                
+                  <!-- Nav links -->
+                    <ul class="navbar-nav d-flex flex-row me-auto">
+                      <li class="nav-item mx-2">
+                        <a class="nav-link text-white" href="{{ url_for('index') }}">Sewing Patterns</a>
+                      </li>
+                      <li class="nav-item mx-2">
+                        <a class="nav-link active" href="{{ url_for('users') }}">Users</a>
+                      </li>
+                      <li class="nav-item mx-2">
+                        <a class="nav-link text-white" href="{{ url_for('about') }}">About</a>
+                      </li>
+                    </ul>
 
-        <hr>
+                    <!-- Button to add a new user-->
+                    <button class="btn custom-btn border-dark" id="button-showCreateUser" onclick="showCreateUser()">Get your userID!</button>
+
+                    <!-- Search form to search by userID-->
+                    <form class="d-flex align-items-center mx-2 my-1" onsubmit="event.preventDefault(); searchByUserID();">
+                      <input class="form-control form-control-md" id="userIdInput" type="search" placeholder="Enter User ID..." aria-label="Search" style="margin-top: 21px;">
+                    </form>          
+                
+                </div>
+            </div>
+        </nav>
         <br>
+        <!--Banner Image-->
+        <img src="{{ url_for('static', filename='banner.png') }}" alt = "Sew Organised" class="img-fluid rounded shadow-lg" style="width: 100%; height: auto;">
+
+        <br>
+
+        <!-- Bootstrap alert container for messages -->
         <div id="alertContainer" class="my-3"></div>
-        <!--Form to Enter UserID-->
-        <div><button class="btn custom-btn border-dark" id="button-showViewAllUsers" onclick="showViewAllUsers()">View All Users</button></div><br>
-        
-             
-        
+
+        <!--View all users button-->
+        <!--<div><button class="btn custom-btn border-dark" id="button-showViewAllUsers" onclick="showViewAllUsers()">View All Users</button></div><br>-->
         <br>
-        <div class="table-responsive w-100">
-        <table class="table table-striped w-100" id="userTable" style="display: none;">
-            <thead >
-                <tr>
-                    <th>UserID &nbsp;&#x2b83;</th>
-                    <th>First Name &nbsp;&#x2b83;</th>
-                    <th>Last Name &nbsp;&#x2b83;</th>
-                    <th>Email &nbsp;&#x2b83;</th>
-                    <th>Password</th>
-                    <th>Update</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-        </div>
+
+        <!-- Table to display users -->
+            <div class="table-responsive w-100">
+                <table class="table table-striped" id="userTable" style="display: none;">
+                    <thead >
+                        <tr>
+                            <th style="width: 10%">UserID</th>
+                            <th style="width: 15%">First Name</th>
+                            <th style="width: 15%">Last Name</th>
+                            <th style="width: 25%">Email</th>
+                            <th style="width: 15%">Password</th>
+                            <th style="width: 10%">Update</th>
+                            <th style="width: 10%">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
             
+    <!--Form for creating and updating users.-->  
     <form id="createUserUpdateForm" style="display:none" onsubmit="return false;">
-        <!-- Form for creating  and updating users -->
         <h2><span id="createLabel">Become a </span><span id="updateLabel">Update</span> User</h2>
         <hr>
         <input type="hidden" name="userID" class="form-control" autocomplete="off">
         <b>First Name: </b><br><input type="text" name="first_name" class="form-control" required><br/>
         <b>Last Name: </b><br><input type="text" name="last_name" class="form-control" required><br/>
         <b>Email: </b><br><input type="email"name="email" class="form-control" required ><br/>
-        <b>Password: </b><br><input type="password" name="password" class="form-control" required><br/><br>
+        <b>Password: </b><br><input type="password" name="password" class="form-control" required><br/>
         <!--Confirm Password<br><input type="password" name="confirmPassword" required><br/>
             <br><br>-->
         <span><button class="btn custom-btn border-dark" id="button-doCreateUser" onclick="doCreateUser()">Register</button></span>
         <span><button class="btn custom-btn border-dark" id="button-doUpdateUser" onclick="doUserUpdate()">Update</button></span>
     </form>
 
+    <!--Log in form, unused-->
     <div id="loginForm" style="display:none;">
         <h2>Login</h2>
         Email<br><input type="email" id="loginEmail" required><br>
         Password<br><input type="password" id="loginPassword" required><br><br>
         <button class="btn custom-btn" onclick="doLogin()">Login</button>
     </div>
-    <footer class="text-center text-white mt-5" style="background-color: #696e8a;">
+
+    <!--Footer-->
+    <footer class="text-center text-white mt-5 rounded" style="background-color: #696e8a;">
     <div class="container p-4">
     <section class="mb-4">
         <p>Yes, you have way too many patterns but there's always room for one more! 
         <br>
-        <a href="https://burdasyle.com" target="_blank" style="color: white;">burdastyle.com    </a>
+        <a href="https://burdastyle.com" target="_blank" style="color: white;">burdastyle.com    </a>
         <a href="https://www.pattydoo.de/" target="_blank" style="color: white;">pattydoo.de</a>
         <a href="https://sewdirect.com" target="_blank" style="color: white;">sewdirect.com</a>          
         <a href="https://www.stylearc.com/" target="_blank" style="color: white;">stylearc.com</a>
@@ -129,12 +145,12 @@
 </body>
 
 <script>
+    // Function to search for a user by UserID
     function searchByUserID() {
         const userID = $("#userIdInput").val().trim();
         if (userID) {
             getUserByID(userID);
-
-                document.getElementById("userTable").style.display = "block";
+            document.getElementById("userTable").style.display = "block";
         } else {
             clearUserTable();
             getAllUserAjax();
@@ -142,7 +158,7 @@
         }
         }
 
-        $(document).ready(function () {
+        $(document).ready(function(){
         // Show UserID details on enter key
         $("#userIdInput").on("keypress", function(event) {
             if (event.which === 13) {
@@ -150,9 +166,9 @@
                 searchByUserID();
             }
         });   
-
     });
 
+    // Function to show what elements to display when user click on "Get your userID"
     function showCreateUser(){
         document.getElementById("createUserUpdateForm").style.display = "block";
         document.getElementById("button-doCreateUser").style.display = "block";
@@ -164,6 +180,7 @@
         //document.getElementById("myInput").style.display = "none";
     }
 
+    // Function to show what elements to display when user click on "View All Users" button
     function showViewAllUsers(){
         console.log('Showing view all')
         document.getElementById("createUserUpdateForm").style.display = "none"
@@ -171,6 +188,7 @@
         document.getElementById("userTable").style.display = "block"
     }
 
+    // Function to show what elements to display when user clicks on "Update" button
     function showUserUpdate(buttonElement){
         //console.log('Updating user...');
         document.getElementById("createUserUpdateForm").style.display = "block";
@@ -188,9 +206,9 @@
         populateFormWithUser(user);
     }
 
+    // Function to create a new user
     function doCreateUser(){
         var form = document.getElementById('createUserUpdateForm')
-
         if (!form.checkValidity()) {
         form.reportValidity();
         return;
@@ -202,13 +220,14 @@
         user.email = form.querySelector('input[name="email"]').value
         user.password = form.querySelector('input[name="password"]').value
         //user.confirmPassword = form.querySelector('input[name="confirmPassword"]').value
-        console.log(JSON.stringify(user))
+        // Don't console.log(user) as it contains the password.
+        //console.log(JSON.stringify(user))
         createUserAjax(user);
     }
 
+    // Function to update an existing user when the user clicks on the "Update" button
     function doUserUpdate(){
         var form = document.getElementById('createUserUpdateForm')
-
         if (!form.checkValidity()) {
         form.reportValidity();
         return;
@@ -216,9 +235,6 @@
 
         console.log("in update")
         var user = getUserFromForm();
-
-        //var form = document.getElementById('createUserUpdateForm');
-        
         var rowElement = document.querySelector(`[userID='${user.userID}']`);
         if (rowElement) {
             updateUserAjax(user);
@@ -230,22 +246,27 @@
         }
     }
 
+    // Function to delete a user when the user clicks on the "Delete" button
     function doUserDelete(r){
         console.log("in delete")
         var tableElement = document.getElementById('userTable');
         var rowElement = r.parentNode.parentNode;
         var index = rowElement.rowIndex;
         
-        console.log("deleting "+ rowElement.getAttribute("userID"))
-        deleteUserAjax(rowElement.getAttribute("userID"));
-        tableElement.deleteRow(index);
-        showViewAllUsers()
+        var result = confirm("Are you sure you want to delete?");
+        if (result) {
+            //Logic to delete the item
+            console.log("deleting "+ rowElement.getAttribute("userID"))
+            deleteUserAjax(rowElement.getAttribute("userID"));
+            tableElement.deleteRow(index);
+            showViewAllUsers()
+        }
     }
     
+    // Function to add user to the table
     function addUserToTable(user){
-        console.log("DEBUG USER to table:", user);
         var tableElement = document.getElementById('userTable').querySelector('tbody');
-        console.log("Adding user to table:", user);
+        //console.log("Adding user to table:", user);
         var rowElement = tableElement.insertRow(-1)
         
         rowElement.setAttribute('userID', user.userID)
@@ -261,15 +282,17 @@
         var cell5 = rowElement.insertCell(4);
         cell5.innerHTML = '********'
         var cell6 = rowElement.insertCell(5);
-        cell6.innerHTML = '<button class="btn custom-btn" onclick="showUserUpdate(this)">Update</button>'
+        cell6.innerHTML = '<button class="btn custom-btn-update" onclick="showUserUpdate(this)">Update</button>'
         var cell7 = rowElement.insertCell(6);
         cell7.innerHTML = '<button class="btn btn-outline-danger" onclick="doUserDelete(this)">Delete</button>'
     }
 
+    // Function to clear the user table
     function clearUserTable() {
         document.getElementById('userTable').querySelector('tbody').innerHTML = '';
     }
 
+    // Function to clear the user form
     function clearUserForm(){
         var form = document.getElementById('createUserUpdateForm')
 
@@ -279,9 +302,9 @@
         form.querySelector('input[name="password"]').value=''
     }
 
+    // Function to get user data from the row element
     function getUserFromRow(rowElement){
         var user ={}
-
         user.userID  = rowElement.getAttribute('userID')
         user.first_name = rowElement.cells[1].textContent;
         user.last_name = rowElement.cells[2].textContent;
@@ -289,7 +312,7 @@
         //user.password = rowElement.cells[4].textContent;
         return user
     }
-
+    // Function to set user data in the row element
     function setUserInRow(rowElement, user){
         rowElement.cells[0].firstChild.textContent = user.userID;
         rowElement.cells[1].firstChild.textContent = user.first_name;
@@ -298,6 +321,7 @@
         //rowElement.cells[4].firstChild.textContent = user.password;
     }
 
+    // Function to populate the form with user data
     function populateFormWithUser(user){
         console.log("Populating form with user:", user);
         var form = document.getElementById('createUserUpdateForm');
@@ -310,7 +334,7 @@
         form.querySelector('input[name= "password"]').value = '';
         return user;
     }
-
+    // Function to get user data from the form
     function getUserFromForm(){
         var form = document.getElementById('createUserUpdateForm')
         var user = {}
@@ -320,11 +344,11 @@
         user.last_name = form.querySelector('[name="last_name"]').value
         user.email = form.querySelector('[name="email"]').value
         user.password = form.querySelector('[name="password"]').value
-        console.log(JSON.stringify(user))
+        //console.log(JSON.stringify(user))
         return user
     }
 
-
+    // Sends an AJAX GET request to get all users
     function getAllUserAjax(){
         $.ajax({
             "url": "/users",
@@ -344,8 +368,9 @@
         });
     }
 
+    // Sends an AJAX POST request to create a new user
     function createUserAjax(user){
-        console.log("Test" , JSON.stringify(user)); 
+        //console.log("Test" , JSON.stringify(user)); 
         $.ajax({
             "url": "/users",
             "method":"POST",
@@ -365,8 +390,10 @@
             }
         });
     }
+
+    // Sends an AJAX PUT request to update an existing user
     function updateUserAjax(user){
-        console.log(JSON.stringify(user));
+        //console.log(JSON.stringify(user));
         $.ajax({
             "url": "/users/"+encodeURI(user.userID),
             "method":"PUT",
@@ -374,7 +401,9 @@
             "dataType": "JSON",
             "contentType": "application/json; charset=utf-8",
             "success":function(result){
-                console.log(result);
+                console.log("User updated successfully")
+                // Don't console.log(result) as it contains the hashed password
+                //console.log(result);
             
             },
             "error":function(xhr,status,error){
@@ -383,6 +412,7 @@
         });
     }
 
+    // Sends an AJAX DELETE request to delete a user by userID
     function deleteUserAjax(userID){
         $.ajax({
             "url": "/users/"+encodeURI(userID),
@@ -400,6 +430,7 @@
         });
     }
 
+    // Function to show an alert message
     function showAlert(message, type = 'danger') {
     const alertHtml = `
       <div class="alert alert-${type} alert-dismissible fade show" role="alert">
@@ -410,6 +441,7 @@
     document.getElementById('alertContainer').innerHTML = alertHtml;
     }
 
+    // Sends an AJAX GET request to get a user by userID
     function getUserByID(userID) {
     $.ajax({
         url: "/users/" + encodeURIComponent(userID),
@@ -430,8 +462,7 @@
     });
     }    
     
-    // Don't display the table at first
-    //getAllUserAjax();
+    getAllUserAjax();
 
     </script>
 </html>

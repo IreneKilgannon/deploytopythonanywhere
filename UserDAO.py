@@ -2,6 +2,7 @@ import mysql.connector
 import db_config as cfg
 
 class UserDAO:
+    """A data object class to interact with the users table in the MySQL database, sewing_patterns."""
     host =""
     user = ""
     password =""
@@ -11,13 +12,14 @@ class UserDAO:
 
 
     def __init__(self):
+        """Initializes the database credentials from config file. """
         self.host= cfg.mysql['host']
         self.user= cfg.mysql['user']
         self.password= cfg.mysql['password']
         self.database= cfg.mysql['database']
 
-    # Setting up connectors to database
     def getCursor(self):
+        """Sets up connection to the database and returns a cursor."""
         self.connection = mysql.connector.connect(
             host=self.host,
             user=self.user,
@@ -28,10 +30,12 @@ class UserDAO:
         return self.cursor
 
     def closeAll(self):
+        """Close the database connection and cursor."""
         self.connection.close()
         self.cursor.close()
 
     def convertToDictionaryUsers(self, resultLine):
+        """Converts the result from a query to the users table into a dictionary."""
         attkeys=['userID', 'first_name','last_name', 'email', 'password']
         user = {}
         currentkey = 0
@@ -41,6 +45,8 @@ class UserDAO:
         return user
     
     def get_all_users(self):
+        """Get all the details from the users table. 
+        For security, does not return the password_hash. """
         try:
             cursor = self.getCursor()
             sql = "SELECT userID, first_name, last_name, email FROM users"
@@ -61,6 +67,7 @@ class UserDAO:
             self.closeAll()
     
     def create_user(self, user):
+        """Create a new user."""
         try:
             cursor = self.getCursor()
             sql = "INSERT INTO users (first_name, last_name, email, password_hash) VALUES (%s, %s, %s, %s)"
@@ -78,6 +85,7 @@ class UserDAO:
             self.closeAll()
         
     def update_user(self, user):
+        """Update a user in the users database."""
         try:
             cursor = self.getCursor()
             sql = "UPDATE users SET first_name = %s, last_name = %s, email = %s, password_hash = %s WHERE userID = %s"
@@ -93,6 +101,7 @@ class UserDAO:
             self.closeAll()
                                                                                                                                                                                                         
     def findByUserID_users(self, userID):
+        """Get a specific user by userID."""
         try:
             cursor = self.getCursor()
             sql = "SELECT userID, first_name, last_name, email FROM users WHERE userID = %s"
@@ -109,6 +118,7 @@ class UserDAO:
             self.closeAll()
 
     def delete_user(self, userID):
+        """Delete a specific user by userID."""
         try:
             cursor = self.getCursor()
             sql = "DELETE FROM users WHERE userID = %s"
@@ -121,12 +131,5 @@ class UserDAO:
             raise
         finally:
             self.closeAll()
-    # Check user exists
-    #def user_exists(self, userID):
-    #    for user in self.users:
-    #        if user["userID"] == userID:
-    #            return True
-    #    return False
 
-    # Instantiate UserDAO outside the class definition
 userDAO = UserDAO()
