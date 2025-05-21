@@ -1,6 +1,6 @@
 # Deploy to Python Anywhere
 
-This repository contains the necessary files to deploy the project for the _Web Services and Applications_ module to [eu.pythonanywere.com](eu.pythonanywhere.com).
+This repository contains the necessary files to deploy the project for the _Web Services and Applications_ module to [eu.pythonanywere.com](https://eu.pythonanywhere.com/).
 
 The main project repository is available at: https://github.com/IreneKilgannon/wsaa-project.
 
