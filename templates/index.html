@@ -865,7 +865,15 @@
                 console.log(result);
             },
             "error":function(xhr,status,error){
-                console.log("error: "+status+" msg:"+error);
+                let errorMsg = "Error updating pattern. Check your userID.";
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    // If userID is not found in users table, show an error message
+                    if (xhr.responseJSON.error === "user_id_not_found") {
+                        errorMsg = "User ID not found. Please enter a valid User ID.";
+                    }
+                }
+                showAlert(errorMsg);
+                console.log("error: " + status + " msg: " + error);
             }
         });
     }

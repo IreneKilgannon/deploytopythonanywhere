@@ -182,6 +182,10 @@ def create():
 def update_pattern(patternID):
     """Update an existing pattern by its patternID"""
     
+    user_id = request.json["userID"]
+    if not userDAO.findByUserID_users(user_id):
+        return jsonify({"error": "user_id_not_found"}), 400
+    
     try:
         # Find the pattern to update
         foundPattern = patternDAO.findByID(patternID)
