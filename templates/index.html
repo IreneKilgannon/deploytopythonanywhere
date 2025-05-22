@@ -448,6 +448,7 @@
     
     // Function to update an existing pattern
     function doUpdate(){
+        console.log('Updating pattern...');
         var form = document.getElementById('createUpdateForm');
         
         if (!form.checkValidity()) {
@@ -460,8 +461,8 @@
         if (rowElement) {
             updatePatternAjax(pattern);
             setPatternInRow(rowElement, pattern);
-            clearForm();
-            showViewAll();
+            //clearForm();
+            //showViewAll();
         } else {
             console.log('Row element not found')
         }
@@ -862,15 +863,15 @@
             "dataType": "JSON",
             "contentType": "application/json",
             "success":function(result){
-                console.log(result);
+                //console.log(result);
+                clearForm();
+                showViewAll();
             },
             "error":function(xhr,status,error){
                 let errorMsg = "Error updating pattern. Check your userID.";
-                if (xhr.responseJSON && xhr.responseJSON.error) {
-                    // If userID is not found in users table, show an error message
-                    if (xhr.responseJSON.error === "user_id_not_found") {
-                        errorMsg = "User ID not found. Please enter a valid User ID.";
-                    }
+                // If userID is not found in users table, show an error message
+                if (xhr.responseJSON.error === "user_id_not_found") {
+                    errorMsg = "UserID not found. Please enter a valid UserID.";
                 }
                 showAlert(errorMsg);
                 console.log("error: " + status + " msg: " + error);

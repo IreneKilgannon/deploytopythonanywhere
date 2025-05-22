@@ -108,6 +108,10 @@ class UserDAO:
             values = (userID, )
             cursor.execute(sql, values)
             result = cursor.fetchone()
+
+            if result is None:
+                return None
+            
             returnvalue = self.convertToDictionaryUsers(result)
             return returnvalue
         
