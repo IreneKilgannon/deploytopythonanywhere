@@ -191,7 +191,7 @@ def update_pattern(patternID):
         foundPattern = patternDAO.findByID(patternID)
         print (foundPattern)
         if not foundPattern:
-            return jsonify({{"error": f"Pattern with ID {patternID} not found"}}), 404
+            return jsonify({"error": f"Pattern with ID {patternID} not found"}), 404
         
         currentPattern = foundPattern
         
