@@ -476,11 +476,14 @@
         var index = rowElement.rowIndex;
         
         var result = confirm("Are you sure you want to delete this pattern?");
-        deletePatternAjax(rowElement.getAttribute("patternID"));
-        tableElement.deleteRow(index);
-        showViewAll()
+        if (result) {
+            console.log("deleting "+ rowElement.getAttribute("patternID"))
+            deletePatternAjax(rowElement.getAttribute("patternID"));
+            tableElement.deleteRow(index);
+            showViewAll()
+        }
     }
-    
+
     // Function to add a pattern to the table body
     function addPatternToTable(pattern){
         var tableBody = document.querySelector ('#patternTable tbody');
