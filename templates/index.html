@@ -825,7 +825,7 @@
             "method":"POST",
             "data":JSON.stringify(pattern),
             "dataType": "JSON",
-            "contentType": "application/json; charset=utf-8",
+            "contentType": "application/json",
             "success":function(result){
                 if (result.patternID) {
                     addPatternToTable(result);
@@ -860,7 +860,7 @@
             "method":"PUT",
             "data":JSON.stringify(pattern),
             "dataType": "JSON",
-            "contentType": "application/json; charset=utf-8",
+            "contentType": "application/json",
             "success":function(result){
                 console.log(result);
             },
@@ -885,7 +885,7 @@
             "method":"DELETE",
             "data":"",
             "dataType": "JSON",
-            "contentType": "application/json; charset=utf-8",
+            "contentType": "application/json",
             "success":function(result){
                 //console.log(result);
             },
