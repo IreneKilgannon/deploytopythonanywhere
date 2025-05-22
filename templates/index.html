@@ -836,7 +836,7 @@
                 showViewAll();
         },
             "error":function(xhr,status,error){
-                //et errorMsg = "Error creating pattern. Check your userID and patternID.";
+                let errorMsg = "Error creating pattern. Check your userID and patternID.";
                 if (xhr.responseJSON && xhr.responseJSON.error) {
                     // If patternID already exists, show an error message
                     if (xhr.responseJSON.error === "pattern_id_exists") {
