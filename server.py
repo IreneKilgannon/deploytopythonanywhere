@@ -140,7 +140,7 @@ def create():
     # Used Chat GPT - how to handle missing fields
     required_fields = ["patternID", "brand", "category", "fabric_type", "description", "format", "userID"]
 
-    # Return an error if all fields are not in the request.. 
+    # Return an error if all fields are not in the request.
     for field in required_fields:
         if field not in request.json:
             return jsonify({"error": f"Missing required field: {field}"}), 400
@@ -181,6 +181,7 @@ def create():
 @app.route('/patterns/<patternID>', methods=['PUT'])
 def update_pattern(patternID):
     """Update an existing pattern by its patternID"""
+    
     try:
         # Find the pattern to update
         foundPattern = patternDAO.findByID(patternID)
@@ -271,8 +272,9 @@ def get_user_by_id(user_id):
         if user:
             return jsonify(user)
         return jsonify({"error": "User not found"}), 404
+    
     except Exception as e:
-        print(f"Error creating user: {e}")
+        print(f"Error getting user: {e}")
         return jsonify({"error": "Internal Server Error with get_user_by_id."}), 500
 
 # Update a user by userID

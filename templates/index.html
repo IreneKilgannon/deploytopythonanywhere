@@ -130,7 +130,7 @@
     <div id="alertContainer" class="my-3"></div>
 
     <!-- Table to display sewing patterns -->
-    <div class="table-responsive rounded shadow-lg">
+    <div class="table-responsive rounded shadow-lg w-100">
         <table class="table table-hover" id="patternTable">
             <thead style="background-color: #696e8a;">
                 <tr>
@@ -175,13 +175,12 @@
             <option value="All">All</option><br/>
             </select><br/>
         <b>Description:</b><br>
-        <textarea name="description" rows="4" class="form-control" required></textarea><br>
+        <textarea name="description" rows="3" class="form-control" required></textarea><br>
         <b>Format:</b><br><select name="format" class="form-control" required>
             <option value="Paper">Paper</option>
             <option value="PDF">PDF</option>
             </select><br> 
         <b>userID:</b><br><input type = "number" min="1" name="userID" class="form-control"required>
-            <br>
         <span><button class="btn custom-btn border-dark" id="button-doCreate" onclick="doCreate()">Create</button></span>
         <span><button class="btn custom-btn border-dark" id="button-doUpdate" onclick="doUpdate()">Update</button></span>
         </form>
@@ -387,8 +386,8 @@
         document.getElementById("button-showCreate").style.display = "none";
         document.getElementById("patternTable").style.display = "none";
         document.getElementById("myInput").style.display = "none";
-        document.getElementById("filterControls").style.display = "none";
-        document.getElementById("filterControls2").style.display = "none";
+        document.getElementById("filterControls rounded shadow-lg").style.display = "none";
+        document.getElementById("filterControls2 rounded shadow-lg").style.display = "none";
     }
 
     // Function to show the view all patterns
@@ -397,9 +396,9 @@
         document.getElementById("createUpdateForm").style.display = "none"
         document.getElementById("button-showCreate").style.display = "block"
         document.getElementById("patternTable").style.display = "block"
-        document.getElementById("filterControls").style.display = "flex";
-        document.getElementById("filterControls2").style.display = "flex";
-        document.getElementById("myInput").style.display = "inline-block";
+        document.getElementById("filterControls rounded shadow-lg").style.display = "flex";
+        document.getElementById("filterControls2 rounded shadow-lg").style.display = "flex";
+        document.getElementById("myInput").style.display = "block";
     }
 
     // Function to indicate what to display when the user clicks the "Update" button
@@ -413,8 +412,8 @@
         document.getElementById("button-showCreate").style.display = "none";
         document.getElementById("patternTable").style.display = "none";
         document.getElementById("myInput").style.display = "none";
-        document.getElementById("filterControls").style.display = "none";
-        document.getElementById("filterControls2").style.display = "none";
+        document.getElementById("filterControls rounded shadow-lg").style.display = "none";
+        document.getElementById("filterControls2 rounded shadow-lg").style.display = "none";
 
         var rowElement= buttonElement.parentNode.parentNode;
         var pattern = getPatternFromRow(rowElement);
@@ -429,8 +428,8 @@
 
         // Check if the form is valid
         if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
+            form.reportValidity();
+            return;
         }
 
         var pattern = {}
@@ -450,6 +449,7 @@
     // Function to update an existing pattern
     function doUpdate(){
         var form = document.getElementById('createUpdateForm');
+        
         if (!form.checkValidity()) {
         form.reportValidity();
         return;
@@ -479,6 +479,7 @@
         tableElement.deleteRow(index);
         showViewAll()
     }
+    
     // Function to add a pattern to the table body
     function addPatternToTable(pattern){
         var tableBody = document.querySelector ('#patternTable tbody');
@@ -827,15 +828,15 @@
             "contentType": "application/json; charset=utf-8",
             "success":function(result){
                 if (result.patternID) {
-                addPatternToTable(result);
+                    addPatternToTable(result);
                 } else {
-                addPatternToTable(pattern);
+                    addPatternToTable(pattern);
                 }
                 clearForm();
                 showViewAll();
         },
             "error":function(xhr,status,error){
-                let errorMsg = "Error creating pattern.";
+                //et errorMsg = "Error creating pattern. Check your userID and patternID.";
                 if (xhr.responseJSON && xhr.responseJSON.error) {
                     // If patternID already exists, show an error message
                     if (xhr.responseJSON.error === "pattern_id_exists") {
