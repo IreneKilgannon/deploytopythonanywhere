@@ -92,9 +92,9 @@
             </select>
         </div>
         <div class="col-md-3">
+            <!-- Will be populated dynamically -->
             <select id="brandFilter" class="form-control">
                 <option value="">Filter by Brand</option>
-                <!-- Will be populated dynamically -->
             </select>
         </div>
         <div class="col-md-3">
@@ -149,8 +149,6 @@
             </tbody>
         </table>
     </div>
-
-    <br/>
 
     <!-- Form for creating and updating sewing patterns -->
     <form id="createUpdateForm" style="display:none" onsubmit="return false;">
@@ -636,7 +634,7 @@
         },
         error: function(xhr, status, error) {
             console.log("Error fetching pattern:", error);
-            showAlert(`Pattern ${patternID} not found.`, 'primary');
+            showAlert(`Pattern ${patternID} not found.`, 'info');
         }
     });
     }
@@ -669,7 +667,7 @@
         },
         "error": function(xhr, status, error) {
             console.log("Error fetching by category: " + status + " msg:" + error);
-            showAlert("No patterns found for category: " + category);
+            showAlert("No patterns found for category: " + category, 'info');
         }
     });
     }
@@ -728,8 +726,8 @@
                 }
             },
             "error": function(xhr, status, error) {
-                console.log("Error fetching by fabric type: " + status + " msg:" + error);
-                showAlert("Error fetching patterns for fabric type: " + fabricType);
+                console.log("No patterns found for fabric type: " + status + " msg:" + error);
+                showAlert("No patterns found for fabric type: " + fabricType, 'info');
             }
         });
     }
@@ -757,8 +755,8 @@
                 }
             },
             "error": function(xhr, status, error) {
-                console.log("Error fetching by format: " + status + " msg:" + error);
-                showAlert("Error fetching patterns for format: " + format);
+                console.log("No patterns found for format: " + status + " msg:" + error);
+                showAlert("No patterns found for format: " + format, 'info');
             }
         });
     }
@@ -787,7 +785,7 @@
             },
             "error": function(xhr, status, error) {
                 console.log("Error fetching by user ID: " + status + " msg:" + error);
-                showAlert(`No patterns found for UserID: ${userID}`, 'primary');
+                showAlert(`No patterns found for UserID: ${userID}`, 'info');
             }
         });
     }
@@ -844,13 +842,14 @@
                 }
                 clearForm();
                 showViewAll();
+                showAlert("Pattern " + pattern.patternID + " created.", 'success')
         },
             "error":function(xhr,status,error){
                 let errorMsg = "Error creating pattern. Check your userID and patternID.";
                 if (xhr.responseJSON && xhr.responseJSON.error) {
                     // If patternID already exists, show an error message
                     if (xhr.responseJSON.error === "pattern_id_exists") {
-                        errorMsg = "Pattern ID already exists. Please use a unique Pattern ID.";
+                        errorMsg = "Pattern ID already exists. Please enter a unique Pattern ID.";
                     // If userID is not found in users table, show an error message
                     } else if (xhr.responseJSON.error === "user_id_not_found") {
                         errorMsg = "User ID not found. Please enter a valid User ID.";
@@ -872,9 +871,9 @@
             "dataType": "JSON",
             "contentType": "application/json",
             "success":function(result){
-                //console.log(result);
                 clearForm();
                 showViewAll();
+                showAlert("Pattern " + pattern.patternID + " updated.", 'success')
             },
             "error":function(xhr,status,error){
                 let errorMsg = "Error updating pattern. Check your userID.";
@@ -897,7 +896,7 @@
             "dataType": "JSON",
             "contentType": "application/json",
             "success":function(result){
-                //console.log(result);
+                showAlert("Pattern " + patternID + " deleted.", 'success')
             },
             "error":function(xhr,status,error){
                 console.log("error: "+status+" msg:"+error);

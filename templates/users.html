@@ -115,10 +115,10 @@
         <h2><span id="createLabel">Become a </span><span id="updateLabel">Update</span> User</h2>
         <hr>
         <input type="hidden" name="userID" class="form-control" autocomplete="off">
-        <b>First Name: </b><br><input type="text" name="first_name" class="form-control" required><br/>
-        <b>Last Name: </b><br><input type="text" name="last_name" class="form-control" required><br/>
-        <b>Email: </b><br><input type="email"name="email" class="form-control" required ><br/>
-        <b>Password: </b><br><input type="password" name="password" class="form-control" required><br/>
+        <b>First Name: </b><br><input type="text" name="first_name" class="form-control" required>
+        <b>Last Name: </b><br><input type="text" name="last_name" class="form-control" required>
+        <b>Email: </b><br><input type="email"name="email" class="form-control" required >
+        <b>Password: </b><br><input type="password" name="password" class="form-control" required>
         <!--Confirm Password<br><input type="password" name="confirmPassword" required><br/>
             <br><br>-->
         <span><button class="btn custom-btn border-dark" id="button-doCreateUser" onclick="doCreateUser()">Register</button></span>
@@ -401,8 +401,7 @@
                 addUserToTable(result);
                 clearUserForm();
                 showViewAllUsers();
-                
-                alert("Welcome " + result.first_name +". Your userID is: " +result.userID, 'success');
+                showAlert("Welcome " + result.first_name +". Your userID is: " +result.userID, 'success');
         },
             "error":function(xhr,status,error){
                 //console.log("error: "+status+" msg:"+error);
@@ -421,7 +420,7 @@
             "contentType": "application/json; charset=utf-8",
             "success":function(result){
                 console.log("User updated successfully")
-                showAlert("Pattern " + user.userID + " updated.", 'success')
+                showAlert("UserID " + user.userID + " updated.", 'success')
                 // Don't console.log(result) as it contains the hashed password
                 //console.log(result);
             
