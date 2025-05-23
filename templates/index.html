@@ -134,15 +134,15 @@
         <table class="table table-hover" id="patternTable">
             <thead style="background-color: #696e8a;">
                 <tr>
-                    <th onclick="sortTable(0)">PatternID &nbsp;&#x2b83;</th>
-                    <th onclick="sortTable(1)">Brand &nbsp;&#x2b83;</th>
-                    <th onclick="sortTable(2)">Category &nbsp;&#x2b83;</th>
-                    <th onclick="sortTable(3)">Fabric Type &nbsp;&#x2b83;</th>
-                    <th onclick="sortTable(4)">Description &nbsp;&#x2b83;</th>
-                    <th onclick="sortTable(5)">Format &nbsp;&#x2b83;</th>
-                    <th onclick="sortTable(6)">userID &nbsp;&#x2b83;</th>
-                    <th>Update</th>
-                    <th>Delete</th>
+                    <th class="col-1" onclick="sortTable(0)">PatternID &nbsp;&#x2b83;</th>
+                    <th class="col-1" onclick="sortTable(1)">Brand &nbsp;&#x2b83;</th>
+                    <th class="col-1" onclick="sortTable(2)">Category &nbsp;&#x2b83;</th>
+                    <th class="col-1" onclick="sortTable(3)">Fabric Type &nbsp;&#x2b83;</th>
+                    <th class="col-2" onclick="sortTable(4)">Description &nbsp;&#x2b83;</th>
+                    <th class="col-1" onclick="sortTable(5)">Format &nbsp;&#x2b83;</th>
+                    <th class="col-1" onclick="sortTable(6)">userID &nbsp;&#x2b83;</th>
+                    <th class="col-1">Update</th>
+                    <th class="col-1">Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -388,6 +388,12 @@
         document.getElementById("myInput").style.display = "none";
         document.getElementById("filterControls rounded shadow-lg").style.display = "none";
         document.getElementById("filterControls2 rounded shadow-lg").style.display = "none";
+
+        // Enable the patternID field for creating a new pattern, chatGPT to fix this error.
+        // When going from update to create, the patternID field was disabled.
+        var form = document.getElementById('createUpdateForm');
+        form.querySelector('input[name="patternID"]').disabled = false;
+        clearForm();
     }
 
     // Function to show the view all patterns

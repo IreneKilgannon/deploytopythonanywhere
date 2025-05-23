@@ -85,23 +85,25 @@
         <br>
 
         <!-- Table to display users -->
-            <div class="table-responsive w-100">
-                <table class="table table-striped" id="userTable" style="display: none;">
+         <div class="container rounded shadow-lg border-dark">
+            <div class="table-responsive">
+                <table class="table table-striped w-100" id="userTable" style="display: none;">
                     <thead >
                         <tr>
-                            <th style="width: 10%">UserID</th>
-                            <th style="width: 15%">First Name</th>
-                            <th style="width: 15%">Last Name</th>
-                            <th style="width: 25%">Email</th>
-                            <th style="width: 15%">Password</th>
-                            <th style="width: 10%">Update</th>
-                            <th style="width: 10%">Delete</th>
+                            <th class="col-1">UserID</th>
+                            <th class="col-2">First Name</th>
+                            <th class="col-3">Last Name</th>
+                            <th class="col-3">Email</th>
+                            <th class="col-2">Password</th>
+                            <th class="col-1">Update</th>
+                            <th class="col-1">Delete</th>
                         </tr>
                     </thead>
                     <tbody>
                     </tbody>
                 </table>
             </div>
+        </div>
             
     <!--Form for creating and updating users.-->  
     <form id="createUserUpdateForm" style="display:none" onsubmit="return false;">
