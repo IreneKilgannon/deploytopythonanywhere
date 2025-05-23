@@ -85,26 +85,31 @@
         <br>
 
         <!-- Table to display users -->
-         <div class="container rounded shadow-lg border-dark">
-            <div class="table-responsive">
-                <table class="table table-striped w-100" id="userTable" style="display: none;">
-                    <thead >
-                        <tr>
-                            <th class="col-1">UserID</th>
-                            <th class="col-2">First Name</th>
-                            <th class="col-3">Last Name</th>
-                            <th class="col-3">Email</th>
-                            <th class="col-2">Password</th>
-                            <th class="col-1">Update</th>
-                            <th class="col-1">Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
+        <div class="container rounded shadow-lg border-dark">
+           <div class="table-responsive">
+               <table class="table table-striped w-100" id="userTable" style="display: none;">
+                   <thead >
+                       <tr>
+                           <th class="col-1">UserID</th>
+                           <th class="col-2">First Name</th>
+                           <th class="col-3">Last Name</th>
+                           <th class="col-3">Email</th>
+                           <th class="col-2">Password</th>
+                           <th class="col-1">Update</th>
+                           <th class="col-1">Delete</th>
+                       </tr>
+                   </thead>
+                   <tbody>
+                   </tbody>
+               </table>
+           </div>
         </div>
-            
+    
+        <!--Clear user-->
+        <div class="col-md-3">
+            <button id="clearUser" class="btn custom-btn" style="display: none;" onclick="clearUser()">Clear User</button>
+        </div>
+
     <!--Form for creating and updating users.-->  
     <form id="createUserUpdateForm" style="display:none" onsubmit="return false;">
         <h2><span id="createLabel">Become a </span><span id="updateLabel">Update</span> User</h2>
@@ -147,16 +152,19 @@
 </body>
 
 <script>
+    
     // Function to search for a user by UserID
     function searchByUserID() {
         const userID = $("#userIdInput").val().trim();
         if (userID) {
             getUserByID(userID);
             document.getElementById("userTable").style.display = "block";
+            document.getElementById("clearUser").style.display = "block";
         } else {
             clearUserTable();
             getAllUserAjax();
             document.getElementById("userTable").style.display = "block";
+            
         }
         }
 
@@ -170,6 +178,12 @@
         });   
     });
 
+    function clearUser(){
+        document.getElementById("userTable").style.display = "none";
+        document.getElementById("clearUser").style.display = "none";
+        $("#userIdInput").val("");
+    }
+        
     // Function to show what elements to display when user click on "Get your userID"
     function showCreateUser(){
         document.getElementById("createUserUpdateForm").style.display = "block";
@@ -179,6 +193,7 @@
         document.getElementById("updateLabel").style.display = "none";
         document.getElementById("button-showCreateUser").style.display = "none";
         document.getElementById("userTable").style.display = "none";
+        document.getElementById("clearUser").style.display = "none";
         //document.getElementById("myInput").style.display = "none";
     }
 
@@ -188,6 +203,7 @@
         document.getElementById("createUserUpdateForm").style.display = "none"
         document.getElementById("button-showCreateUser").style.display = "block"
         document.getElementById("userTable").style.display = "block"
+        document.getElementById("clearUser").style.display = "none";
     }
 
     // Function to show what elements to display when user clicks on "Update" button
@@ -200,6 +216,7 @@
         document.getElementById("updateLabel").style.display = "inline";
         document.getElementById("button-showCreateUser").style.display = "none";
         document.getElementById("userTable").style.display = "none";
+        document.getElementById("clearUser").style.display = "none";
         //document.getElementById("myInput").style.display = "none";
         var rowElement= buttonElement.parentNode.parentNode;
         var user = getUserFromRow(rowElement);
@@ -385,7 +402,7 @@
                 clearUserForm();
                 showViewAllUsers();
                 
-                alert("Welcome " + result.first_name +". Your userID is: " +result.userID);
+                alert("Welcome " + result.first_name +". Your userID is: " +result.userID, 'success');
         },
             "error":function(xhr,status,error){
                 //console.log("error: "+status+" msg:"+error);
@@ -404,6 +421,7 @@
             "contentType": "application/json; charset=utf-8",
             "success":function(result){
                 console.log("User updated successfully")
+                showAlert("Pattern " + user.userID + " updated.", 'success')
                 // Don't console.log(result) as it contains the hashed password
                 //console.log(result);
             
@@ -424,7 +442,7 @@
             "contentType": "application/json; charset=utf-8",
             "success":function(result){
                 //console.log(result);
-
+                showAlert("User " + userID + " deleted.", 'success')
             },
             "error":function(xhr,status,error){
                 console.log("error: "+status+" msg:"+error);
