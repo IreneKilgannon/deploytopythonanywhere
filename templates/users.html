@@ -397,7 +397,7 @@
             "method":"POST",
             "data":JSON.stringify(user),
             "dataType": "JSON",
-            "contentType": "application/json; charset=utf-8",
+            "contentType": "application/json",
             "success":function(result){
                 user.userID = result.userID
                 addUserToTable(result);
@@ -419,7 +419,7 @@
             "method":"PUT",
             "data":JSON.stringify(user),
             "dataType": "JSON",
-            "contentType": "application/json; charset=utf-8",
+            "contentType": "application/json",
             "success":function(result){
                 console.log("User updated successfully")
                 showAlert("UserID " + user.userID + " updated.", 'success')
@@ -440,7 +440,7 @@
             "method":"DELETE",
             "data":"",
             "dataType": "JSON",
-            "contentType": "application/json; charset=utf-8",
+            "contentType": "application/json",
             "success":function(result){
                 //console.log(result);
                 showAlert("User " + userID + " deleted.", 'success')
@@ -465,10 +465,11 @@
     // Sends an AJAX GET request to get a user by userID
     function getUserByID(userID) {
     $.ajax({
-        url: "/users/" + encodeURIComponent(userID),
-        method: "GET",
-        dataType: "JSON",
-        success: function(user) {
+        "url": "/users/" + encodeURIComponent(userID),
+        "method": "GET",
+        "dataType": "JSON",
+        "contentType": "application/json",
+        "success": function(user) {
             $('#userTable tbody').empty(); // Clear table
             if (user && user.userID) {
                 addUserToTable(user); 
@@ -476,7 +477,7 @@
                 showAlert("UserID not found");
             }
         },
-        error: function(xhr, status, error) {
+        "error": function(xhr, status, error) {
             console.log("Error fetching pattern:", error);
             showAlert(`UserID ${userID} not found.`, 'primary');
         }

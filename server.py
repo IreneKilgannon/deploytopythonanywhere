@@ -25,6 +25,7 @@ def about():
 
 ###### Pattern API Routes
 # Get all patterns
+# curl "http://127.0.0.1:5000/patterns"
 @app.route('/patterns', methods = ['GET'])
 def getAll():
     """Return a list of all sewing patterns."""
@@ -36,7 +37,8 @@ def getAll():
         return jsonify({"error: Unable to get all patterns"}), 500
 
 
-# Get a pattern by patternID
+#Get a pattern by patternID
+# curl "http://127.0.0.1:5000/patterns/B7012"
 @app.route('/patterns/<patternID>', methods = ['GET'])
 def findByID(patternID):
     """Find a pattern by its patternID."""
@@ -53,6 +55,7 @@ def findByID(patternID):
         
 
 # Get patterns by brand
+# curl "http://127.0.0.1:5000/patterns/brand/vogue"
 @app.route('/patterns/brand/<brand>', methods = ['GET'])
 def findByBrand(brand):
     """Find patterns by a specific brand."""
@@ -69,6 +72,7 @@ def findByBrand(brand):
 
 
 # Find patterns by category
+# curl "http://127.0.0.1:5000/patterns/category/dress"
 @app.route('/patterns/category/<category>', methods = ['GET'])
 def findByCategory(category):
     """Find patterns by category."""
@@ -84,6 +88,7 @@ def findByCategory(category):
         return jsonify({"error": "Internal Server Error"}), 500
 
 # Get patterns by fabric type
+# curl "http://127.0.0.1:5000/patterns/fabric_type/woven"
 @app.route('/patterns/fabric_type/<fabric_type>', methods=['GET'])
 def findByFabric(fabric_type):
     """Find patterns by fabric type"""
@@ -100,6 +105,7 @@ def findByFabric(fabric_type):
 
 
 # Get patterns by format
+# curl "http://127.0.0.1:5000/patterns/format/paper"
 @app.route('/patterns/format/<format>')
 def findByFormat(format):
     """Find patterns by pattern format"""
@@ -115,6 +121,7 @@ def findByFormat(format):
 
 
 # Get patterns by userID
+# curl "http://127.0.0.1:5000/patterns/userID/1"
 @app.route('/patterns/userID/<userID>')
 def findByUserID(userID):
     """Find patterns by a specific userID."""
@@ -131,6 +138,7 @@ def findByUserID(userID):
 
 
 # Create a pattern
+# curl -i -H "Content-Type: application/json" -X POST -d "{\"patternID\":\"V9075\", \"brand\": \"Vogue\", \"category\": \"Dress\", \"fabric_type\": \"Woven\", \"description\":\"Summer dress\", \"format\": \"Paper\", \"userID\": 1}" http://127.0.0.1:5000/patterns
 @app.route('/patterns', methods=['POST'])
 def create():
     """Create a new sewing pattern."""
@@ -178,6 +186,7 @@ def create():
 
 
 # Update an existing pattern.
+# curl -i -H "Content-Type: application/json" -X PUT -d "{\"patternID\":\"V9075\", \"brand\": \"Vogue\", \"category\": \"Dress\", \"fabric_type\": \"Woven\", \"description\":\"Summer dress and jumpsuit\", \"format\": \"Paper\", \"userID\": 1}" http://127.0.0.1:5000/patterns/V9075
 @app.route('/patterns/<patternID>', methods=['PUT'])
 def update_pattern(patternID):
     """Update an existing pattern by its patternID"""
@@ -220,6 +229,7 @@ def update_pattern(patternID):
 
 
 #  Delete a pattern
+# curl -i -X DELETE http://127.0.0.1:5000/patterns/V9075
 @app.route('/patterns/<patternID>', methods=['DELETE'])
 def delete(patternID):
     try:
@@ -233,6 +243,7 @@ def delete(patternID):
 ######## User Routes
 
 # Get all users.
+# curl http://127.0.0.1:5000/users/all_users
 @app.route('/users/all_users', methods = ['GET'])
 def get_all_users():
     """Return a list of all users"""
@@ -246,6 +257,7 @@ def get_all_users():
         return jsonify({"error": "Something went wrong with get_all_users."}), 500
 
 # Create a new user
+# curl -i -H "Content-Type: application/json" -X POST -d "{\"first_name\":\"Mary\", \"last_name\": \"Smith\", \"email\": \"mary@smith.ie\", \"password\": \"trouble\"}" http://127.0.0.1:5000/users
 @app.route('/users', methods=['POST'])
 def create_user():
     """Create a new user account."""
@@ -269,6 +281,7 @@ def create_user():
         return jsonify({"error": "Failed to create user."}), 500
 
 # Get user by userID
+# curl http://127.0.0.1:5000/users/1
 @app.route('/users/<user_id>', methods=['GET'])
 def get_user_by_id(user_id):
     """Return user information by userID."""
@@ -283,6 +296,7 @@ def get_user_by_id(user_id):
         return jsonify({"error": "Internal Server Error with get_user_by_id."}), 500
 
 # Update a user by userID
+# curl -i -H "Content-Type: application/json" -X PUT -d "{\"first_name\":\"Mary Update\", \"last_name\": \"Smith\", \"email\": \"mary@smith.com\", \"password\": \"trouble\"}" http://127.0.0.1:5000/users/2
 @app.route('/users/<userID>', methods=['PUT'])
 def update_user(userID):
     """Update a user by userID"""
@@ -312,6 +326,7 @@ def update_user(userID):
 
 
 #  Delete user by userID
+# curl -i -X DELETE http://127.0.0.1:5000/users/3
 @app.route('/users/<userID>', methods=['DELETE'])
 def delete_user(userID):
     """Delete a user by userID"""
