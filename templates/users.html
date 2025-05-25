@@ -81,7 +81,7 @@
         <div id="alertContainer" class="my-3"></div>
 
         <!--View all users button-->
-        <!--<div><button class="btn custom-btn border-dark" id="button-showViewAllUsers" onclick="showViewAllUsers()">View All Users</button></div><br>-->
+        <div><button class="btn custom-btn border-dark" id="button-showViewAllUsers" onclick="showViewAllUsers()">View All Users</button></div><br>
         <br>
 
         <!-- Table to display users -->
@@ -370,7 +370,7 @@
     // Sends an AJAX GET request to get all users
     function getAllUserAjax(){
         $.ajax({
-            "url": "/users",
+            "url": "/users/all_users",
             "method":"GET",
             "data":"",
             "dataType": "JSON",

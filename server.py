@@ -233,7 +233,7 @@ def delete(patternID):
 ######## User Routes
 
 # Get all users.
-@app.route('/users', methods = ['GET'])
+@app.route('/users/all_users', methods = ['GET'])
 def get_all_users():
     """Return a list of all users"""
     try:
